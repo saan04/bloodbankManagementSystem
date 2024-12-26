@@ -1,0 +1,9 @@
+com/bloodbank/request/config/WebClientConfig.class
+com/bloodbank/request/controller/BloodRequestController.class
+com/bloodbank/request/model/BloodRequest$RequestStatus.class
+com/bloodbank/request/dto/InventoryResponse.class
+com/bloodbank/request/repository/BloodRequestRepository.class
+com/bloodbank/request/model/BloodRequest$PriorityLevel.class
+com/bloodbank/request/RequestServiceApplication.class
+com/bloodbank/request/model/BloodRequest.class
+com/bloodbank/request/service/BloodRequestService.class
