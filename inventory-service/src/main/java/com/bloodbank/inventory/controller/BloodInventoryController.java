@@ -9,7 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,8 @@ public class BloodInventoryController {
     }
 
     @GetMapping("/{bloodGroup}")
-    public ResponseEntity<BloodInventory> getInventoryByBloodGroup(@PathVariable String bloodGroup) {
+    public ResponseEntity<BloodInventory> getInventoryByBloodGroup(
+            @PathVariable String bloodGroup) {
         return ResponseEntity.ok(inventoryService.getInventoryByBloodGroup(bloodGroup));
     }
 
@@ -37,12 +37,12 @@ public class BloodInventoryController {
     }
 
     @PostMapping("/{bloodGroup}/donate")
-    public ResponseEntity<BloodInventory> addDonation(
+    public ResponseEntity<BloodInventory> processDonation(
             @PathVariable String bloodGroup,
-            @RequestBody Map<String, Integer> request) {
+            @RequestBody Map<String, Integer> donation) {
         return ResponseEntity.ok(inventoryService.updateInventory(
                 bloodGroup,
-                request.get("quantity"),
+                donation.get("quantity"),
                 BloodTransaction.TransactionType.DONATION));
     }
 
@@ -50,14 +50,23 @@ public class BloodInventoryController {
     public ResponseEntity<BloodInventory> processRequest(
             @PathVariable String bloodGroup,
             @RequestBody Map<String, Integer> request) {
-        return ResponseEntity.ok(inventoryService.updateInventory(
+        try {
+            Integer quantity = request.get("quantity");
+            if (quantity == null) {
+                throw new IllegalArgumentException("Quantity must be specified");
+            }
+            BloodInventory inventory = inventoryService.updateInventory(
                 bloodGroup,
-                request.get("quantity"),
-                BloodTransaction.TransactionType.REQUEST));
+                quantity,
+                BloodTransaction.TransactionType.REQUEST);
+            return ResponseEntity.ok(inventory);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to process request: " + e.getMessage());
+        }
     }
 
     @GetMapping("/transactions")
-    public ResponseEntity<List<BloodTransaction>> getTransactionHistory() {
+    public ResponseEntity<List<BloodTransaction>> getAllTransactions() {
         return ResponseEntity.ok(inventoryService.getTransactionHistory());
     }
 
@@ -68,7 +77,7 @@ public class BloodInventoryController {
         return ResponseEntity.ok(inventoryService.getTransactionsByDateRange(start, end));
     }
 
-    @GetMapping("/transactions/type/{type}")
+    @GetMapping("/transactions/{type}")
     public ResponseEntity<List<BloodTransaction>> getTransactionsByType(
             @PathVariable BloodTransaction.TransactionType type) {
         return ResponseEntity.ok(inventoryService.getTransactionsByType(type));
@@ -78,12 +87,19 @@ public class BloodInventoryController {
     public ResponseEntity<Boolean> checkAvailability(
             @PathVariable String bloodGroup,
             @RequestParam int quantity) {
-        return ResponseEntity.ok(inventoryService.checkAvailability(bloodGroup, quantity));
+        try {
+            System.out.println("Received availability check for blood group: " + bloodGroup + ", quantity: " + quantity);
+            boolean available = inventoryService.checkAvailability(bloodGroup, quantity);
+            System.out.println("Availability result: " + available);
+            return ResponseEntity.ok(available);
+        } catch (Exception e) {
+            System.err.println("Error checking availability: " + e.getMessage());
+            throw e;
+        }
     }
 
-    @PostMapping("/check-low-inventory")
-    public ResponseEntity<Void> checkLowInventory() {
-        inventoryService.checkLowInventory();
-        return ResponseEntity.ok().build();
+    @GetMapping("/check-low-inventory")
+    public ResponseEntity<List<Map<String, Object>>> checkLowInventory() {
+        return ResponseEntity.ok(inventoryService.checkLowInventory());
     }
 }

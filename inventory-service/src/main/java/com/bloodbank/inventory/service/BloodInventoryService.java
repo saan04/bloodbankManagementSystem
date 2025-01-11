@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BloodInventoryService {
@@ -32,8 +35,20 @@ public class BloodInventoryService {
 
     @Transactional
     public BloodInventory addBloodGroup(BloodInventory inventory) {
+        if (inventory == null) {
+            throw new IllegalArgumentException("Inventory cannot be null");
+        }
+        if (inventory.getBloodGroup() == null || !inventory.getBloodGroup().matches("^(A|B|AB|O)[+-]$")) {
+            throw new IllegalArgumentException("Invalid blood group format");
+        }
         if (inventoryRepository.existsByBloodGroup(inventory.getBloodGroup())) {
-            throw new IllegalArgumentException("Blood group already exists");
+            throw new IllegalArgumentException("Blood group already exists: " + inventory.getBloodGroup());
+        }
+        if (inventory.getQuantity() == null) {
+            inventory.setQuantity(0);
+        }
+        if (inventory.getMinThreshold() == null) {
+            throw new IllegalArgumentException("Minimum threshold must be specified");
         }
         return inventoryRepository.save(inventory);
     }
@@ -91,21 +106,30 @@ public class BloodInventoryService {
     public boolean checkAvailability(String bloodGroup, int quantity) {
         try {
             BloodInventory inventory = getInventoryByBloodGroup(bloodGroup);
+            System.out.println("Checking availability for " + bloodGroup + ": Required=" + quantity + ", Available=" + inventory.getQuantity());
             return inventory.getQuantity() >= quantity;
         } catch (EntityNotFoundException e) {
+            System.err.println("Blood group " + bloodGroup + " not found in inventory");
             return false;
         }
     }
 
-    public void checkLowInventory() {
+    public List<Map<String, Object>> checkLowInventory() {
         List<BloodInventory> inventories = getAllInventory();
+        List<Map<String, Object>> alerts = new ArrayList<>();
+        
         for (BloodInventory inventory : inventories) {
             if (inventory.getQuantity() <= inventory.getMinThreshold()) {
-                // Here you could implement notification logic
-                System.out.println("LOW INVENTORY ALERT: " + inventory.getBloodGroup() + 
-                                 " is below minimum threshold. Current quantity: " + 
-                                 inventory.getQuantity());
+                Map<String, Object> alert = new HashMap<>();
+                alert.put("bloodGroup", inventory.getBloodGroup());
+                alert.put("currentQuantity", inventory.getQuantity());
+                alert.put("minThreshold", inventory.getMinThreshold());
+                alert.put("message", String.format("LOW INVENTORY ALERT: %s is below minimum threshold. Current quantity: %d",
+                        inventory.getBloodGroup(), inventory.getQuantity()));
+                alert.put("timestamp", LocalDateTime.now());
+                alerts.add(alert);
             }
         }
+        return alerts;
     }
 }

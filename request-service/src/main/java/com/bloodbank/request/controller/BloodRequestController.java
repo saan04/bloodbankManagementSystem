@@ -25,31 +25,33 @@ public class BloodRequestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BloodRequest> getRequestById(@PathVariable Long id) {
+    public ResponseEntity<BloodRequest> getRequestById(
+            @PathVariable(name = "id") Long id) {
         return ResponseEntity.ok(requestService.getRequestById(id));
     }
 
     @GetMapping("/status/{status}")
     public ResponseEntity<List<BloodRequest>> getRequestsByStatus(
-            @PathVariable BloodRequest.RequestStatus status) {
+            @PathVariable(name = "status") BloodRequest.RequestStatus status) {
         return ResponseEntity.ok(requestService.getRequestsByStatus(status));
     }
 
     @GetMapping("/hospital/{hospitalName}")
     public ResponseEntity<List<BloodRequest>> getRequestsByHospital(
-            @PathVariable String hospitalName) {
+            @PathVariable(name = "hospitalName") String hospitalName) {
         return ResponseEntity.ok(requestService.getRequestsByHospital(hospitalName));
     }
 
     @PostMapping
-    public ResponseEntity<BloodRequest> createRequest(@Valid @RequestBody BloodRequest request) {
+    public ResponseEntity<BloodRequest> createRequest(
+            @Valid @RequestBody BloodRequest request) {
         return new ResponseEntity<>(requestService.createRequest(request), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/status")
     public ResponseEntity<BloodRequest> updateRequestStatus(
-            @PathVariable Long id,
-            @RequestParam BloodRequest.RequestStatus status) {
+            @PathVariable(name = "id") Long id,
+            @RequestParam(name = "status") BloodRequest.RequestStatus status) {
         return ResponseEntity.ok(requestService.updateRequestStatus(id, status));
     }
 
@@ -61,8 +63,8 @@ public class BloodRequestController {
     }
 
     @PostMapping("/process-emergency")
-    public ResponseEntity<Void> processEmergencyRequests() {
-        requestService.processEmergencyRequests();
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<BloodRequest>> processEmergencyRequests() {
+        List<BloodRequest> processedRequests = requestService.processEmergencyRequests();
+        return ResponseEntity.ok(processedRequests);
     }
 }

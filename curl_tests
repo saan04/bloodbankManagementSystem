@@ -1,0 +1,124 @@
+# Create a new donor
+curl -X POST http://localhost:8081/api/donors \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "dateOfBirth": "1990-01-01",
+    "bloodGroup": "A+",
+    "phoneNumber": "1234567890",
+    "email": "john@example.com",
+    "address": "123 Main St",
+    "lastDonationDate": null,
+    "eligible": true
+  }'
+
+# Get all donors
+curl http://localhost:8081/api/donors
+
+# Get donor by ID
+curl http://localhost:8081/api/donors/1
+
+# Get donors by blood group
+curl http://localhost:8081/api/donors/blood-group/A+
+
+# Get eligible donors
+curl http://localhost:8081/api/donors/eligible
+
+# Record a donation
+curl -X POST http://localhost:8081/api/donors/1/donate
+
+# Update donor
+curl -X PUT http://localhost:8081/api/donors/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe Updated",
+    "dateOfBirth": "1990-01-01",
+    "bloodGroup": "A+",
+    "phoneNumber": "1234567890",
+    "email": "john@example.com",
+    "address": "123 Main St",
+    "lastDonationDate": null,
+    "eligible": true
+  }'
+
+# Delete donor
+curl -X DELETE http://localhost:8081/api/donors/1
+
+
+
+# Add new blood group inventory
+curl -X POST http://localhost:8082/api/inventory \
+  -H "Content-Type: application/json" \
+  -d '{
+    "bloodGroup": "A+",
+    "quantity": 20,
+    "minThreshold": 10
+  }'
+
+# Get all inventory
+curl http://localhost:8082/api/inventory
+
+# Get inventory by blood group
+curl http://localhost:8082/api/inventory/A+
+
+# Add donation
+curl -X POST http://localhost:8082/api/inventory/A+/donate \
+  -H "Content-Type: application/json" \
+  -d '{"quantity": 2}'
+
+# Process blood request
+curl -X POST http://localhost:8082/api/inventory/A+/request \
+  -H "Content-Type: application/json" \
+  -d '{"quantity": 1}'
+
+# Check availability
+curl "http://localhost:8082/api/inventory/A+/check?quantity=1"
+
+# Get all transactions
+curl http://localhost:8082/api/inventory/transactions
+
+# Get transactions by type
+curl http://localhost:8082/api/inventory/transactions/type/DONATION
+
+# Get transactions by date range
+curl "http://localhost:8082/api/inventory/transactions/date-range?start=2025-01-01T00:00:00&end=2025-01-11T23:59:59"
+
+# Check low inventory
+curl -X GET http://localhost:8082/api/inventory/check-low-inventory
+
+
+
+# Create new blood request
+curl -X POST http://localhost:8090/api/requests \
+  -H "Content-Type: application/json" \
+  -d '{
+    "patientName": "Jane Doe",
+    "bloodGroup": "O+",
+    "unitsRequired": 2,
+    "hospitalName": "City Hospital",
+    "priority": "LOW",
+    "status": "PENDING",
+    "requiredBy": "2025-01-12T12:00:00",
+    "contactNumber": "1234567890"
+  }'
+
+# Get all requests
+curl http://localhost:8090/api/requests
+
+# Get request by ID
+curl http://localhost:8090/api/requests/1
+
+# Get requests by status
+curl http://localhost:8090/api/requests/status/PENDING
+
+# Get requests by hospital
+curl http://localhost:8090/api/requests/hospital/City%20Hospital
+
+# Update request status
+curl -X PUT "http://localhost:8090/api/requests/1/status?status=FULFILLED"
+
+# Get requests by date range
+curl "http://localhost:8090/api/requests/date-range?start=2025-01-01T00:00:00&end=2025-01-11T23:59:59"
+
+# Process emergency requests
+curl -X POST http://localhost:8090/api/requests/process-emergency

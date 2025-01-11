@@ -23,7 +23,7 @@ public class DonorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Donor> getDonorById(@PathVariable Long id) {
+    public ResponseEntity<Donor> getDonorById(@PathVariable(name = "id") Long id) {
         return ResponseEntity.ok(donorService.getDonorById(id));
     }
 
@@ -43,18 +43,18 @@ public class DonorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Donor> updateDonor(@PathVariable Long id, @Valid @RequestBody Donor donor) {
+    public ResponseEntity<Donor> updateDonor(@PathVariable(name = "id") Long id, @Valid @RequestBody Donor donor) {
         return ResponseEntity.ok(donorService.updateDonor(id, donor));
     }
 
     @PostMapping("/{id}/donate")
-    public ResponseEntity<Void> recordDonation(@PathVariable Long id) {
+    public ResponseEntity<Void> recordDonation(@PathVariable(name = "id") Long id) {
         donorService.recordDonation(id);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDonor(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDonor(@PathVariable(name = "id") Long id) {
         donorService.deleteDonor(id);
         return ResponseEntity.noContent().build();
     }
