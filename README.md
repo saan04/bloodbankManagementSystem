@@ -2,6 +2,10 @@
 
 A microservices-based Blood Bank Donation System implemented using Spring Boot and Spring Cloud Gateway.
 
+## Loom Video Link
+
+https://www.loom.com/share/6067ab077cf046d48e955e0cf66a1caa?sid=53f54299-8e0c-415d-b185-de0bae34fe02
+
 ## System Architecture
 
 The system consists of three main microservices and a gateway service:
