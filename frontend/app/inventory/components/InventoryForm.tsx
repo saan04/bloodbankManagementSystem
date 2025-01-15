@@ -62,7 +62,7 @@ export default function InventoryForm({ onSubmit, onCancel }: InventoryFormProps
                 type="number"
                 required
                 min="1"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-black"
                 value={formData.quantity}
                 onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
               />
@@ -77,7 +77,7 @@ export default function InventoryForm({ onSubmit, onCancel }: InventoryFormProps
                 type="number"
                 required
                 min="1"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-black"
                 value={formData.minThreshold}
                 onChange={(e) => setFormData({ ...formData, minThreshold: e.target.value })}
               />

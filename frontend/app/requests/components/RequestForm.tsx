@@ -50,7 +50,7 @@ export default function RequestForm({ onSubmit, onCancel }: RequestFormProps) {
                 <input
                   type="text"
                   required
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-black"
                   value={formData.patientName}
                   onChange={(e) =>
                     setFormData({ ...formData, patientName: e.target.value })
@@ -65,7 +65,7 @@ export default function RequestForm({ onSubmit, onCancel }: RequestFormProps) {
                 <input
                   type="tel"
                   required
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-black"
                   value={formData.contactNumber}
                   onChange={(e) =>
                     setFormData({ ...formData, contactNumber: e.target.value })
@@ -102,7 +102,7 @@ export default function RequestForm({ onSubmit, onCancel }: RequestFormProps) {
                   type="number"
                   required
                   min="1"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-black"
                   value={formData.unitsRequired}
                   onChange={(e) =>
                     setFormData({ ...formData, unitsRequired: e.target.value })
@@ -117,7 +117,7 @@ export default function RequestForm({ onSubmit, onCancel }: RequestFormProps) {
                 <input
                   type="text"
                   required
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-black"
                   value={formData.hospitalName}
                   onChange={(e) =>
                     setFormData({ ...formData, hospitalName: e.target.value })
@@ -153,7 +153,7 @@ export default function RequestForm({ onSubmit, onCancel }: RequestFormProps) {
                 <input
                   type="datetime-local"
                   required
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-black"
                   value={formData.requiredBy}
                   onChange={(e) =>
                     setFormData({ ...formData, requiredBy: e.target.value })
